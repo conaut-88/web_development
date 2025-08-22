@@ -32,8 +32,32 @@ Nutricionista.prototype = Object.create(Pessoa.prototype);
 Nutricionista.prototype.constructor = Nutricionista;
 
 function renderizaResultadoIMC(nutricionista) {
+    var imc = nutricionista.imc();
+    var classificacao = nutricionista.classificaIMC();
+    
     document.getElementById("imc").innerText =
-        nutricionista.imc().toFixed(2) + " - " + nutricionista.classificaIMC();
+        imc.toFixed(2) + " - " + classificacao;
+    
+    var linhasTabela = document.querySelectorAll(".data .tabela tbody tr");
+    for (var i = 0; i < linhasTabela.length; i++) {
+        linhasTabela[i].className = "";
+    }
+    
+    var range;
+    if (imc < 18.5) {
+        range = "abaixo";
+    } else if (imc >= 18.5 && imc < 24.9) {
+        range = "normal";
+    } else if (imc >= 25 && imc < 29.9) {
+        range = "sobrepeso";
+    } else {
+        range = "obesidade";
+    }
+    
+    var linhaDestaque = document.querySelector('.data .tabela tbody tr[data-range="' + range + '"]');
+    if (linhaDestaque) {
+        linhaDestaque.className = "destacado";
+    }
 }
 
 function actionCalcularIMCBuilder() {
